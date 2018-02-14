@@ -21,7 +21,7 @@ public class Main {
 	public static void main(String[] args) throws IOException, org.json.simple.parser.ParseException {
 
 		// Insert your Dota2 profile ID
-		int myAccountId = 71373154;
+		int myAccountId = 86710513;
 
 		long matchId = 0;
 		ArrayList<Long> accountIds = new ArrayList<Long>();
@@ -32,11 +32,13 @@ public class Main {
 		ArrayList<Long> whitelistIds = new ArrayList<Long>();
 		
 		//This list is used to whitelist (e.g your friends) IDs
+		whitelistIds.add((long) myAccountId);
 		whitelistIds.add((long) 84181635);
 		whitelistIds.add((long) 70852572);
 		whitelistIds.add((long) 52771263);
 		whitelistIds.add((long) 16461605);
 		whitelistIds.add((long) 71373154);
+		whitelistIds.add((long) 86710513);
 
 		JSONParser parser = new JSONParser();
 		// Get last match ID
