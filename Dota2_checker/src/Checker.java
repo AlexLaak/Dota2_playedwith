@@ -16,7 +16,7 @@ public class Checker {
 		
 	}
 	
-	public void CheckLastPlayed(int accountId) throws IOException, org.json.simple.parser.ParseException {
+	public void CheckLastPlayed(int accountId) throws IOException, org.json.simple.parser.ParseException, InterruptedException {
 
 		int myAccountId = accountId;
 
@@ -89,10 +89,10 @@ public class Checker {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 
 		// Making urls for played with fetching from OpenDota API
 
-		//myAccountId
 		String playedWithUrl = "https://api.opendota.com/api/players/" + myAccountId + "/matches?";
 		for (int i = 0; i < accountIds.size(); i++) {
 			if (accountIds.get(i) != null && !whitelistIds.contains(accountIds.get(i))) {
@@ -105,6 +105,15 @@ public class Checker {
 		for (int j = 0; j < newUrls.size(); j++) {
 
 			String name = names.get(j);
+			
+			if (j >= 10) {
+				break;
+			}
+			
+			// 1 sec wait time, so API wont get overloaded
+			if (j == 0 || j == 3 || j == 6 || j == 9) {
+				Thread.sleep(1100);
+			}
 
 			try {
 				HttpURLConnection connection = (HttpURLConnection) new URL(newUrls.get(j)).openConnection();

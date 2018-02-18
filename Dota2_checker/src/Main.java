@@ -10,7 +10,7 @@ public class Main {
 	//Powered by OpenDota API
 	
 
-	public static void main(String[] args) throws IOException, ParseException {
+	public static void main(String[] args) throws IOException, ParseException, InterruptedException {
 		
 		Checker check = new Checker();
 		
