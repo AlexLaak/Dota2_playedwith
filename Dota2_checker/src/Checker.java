@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -25,6 +26,9 @@ public class Checker {
 		ArrayList<String> newUrls = new ArrayList<String>();
 		ArrayList<Long> matchIds = new ArrayList<Long>();
 		ArrayList<String> names = new ArrayList<String>();
+		ArrayList<Date> dates = new ArrayList<Date>();
+
+		final long UNIX_TIMESTAMP_MILLIS = 1555271886*1000;
 
 		ArrayList<Long> whitelistIds = new ArrayList<Long>();
 		
@@ -47,13 +51,11 @@ public class Checker {
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
 			String inputLine;
-			while ((inputLine = in.readLine()) != null) {
-				Object obj = parser.parse(inputLine);
-				JSONArray jsonArray = (JSONArray) obj;
-				JSONObject jsonObject = (JSONObject) jsonArray.get(0);
-				matchId = (long) jsonObject.get("match_id");
-
-			}
+			inputLine = in.readLine();
+			Object obj = parser.parse(inputLine);
+			JSONArray jsonArray = (JSONArray) obj;
+			JSONObject jsonObject = (JSONObject) jsonArray.get(0);
+			matchId = (long) jsonObject.get("match_id");
 			in.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -109,11 +111,6 @@ public class Checker {
 			if (j >= 10) {
 				break;
 			}
-			
-			// 1 sec wait time, so API wont get overloaded
-			if (j == 0 || j == 3 || j == 6 || j == 9) {
-				Thread.sleep(1100);
-			}
 
 			try {
 				HttpURLConnection connection = (HttpURLConnection) new URL(newUrls.get(j)).openConnection();
@@ -129,6 +126,9 @@ public class Checker {
 						if (jsonArray.size() != 1) {
 							JSONObject result = (JSONObject) jsonArray.get(i);
 							matchIds.add((Long) result.get("match_id"));
+
+							Date matchDate = new Date((Long)result.get("start_time")*1000 - UNIX_TIMESTAMP_MILLIS);
+							dates.add(matchDate);
 						}
 					}
 					System.out.println(name);
@@ -136,10 +136,12 @@ public class Checker {
 						System.out.println("No matches found!");
 					} else {
 						for (int i = 0; i < matchIds.size(); i++) {
-							System.out.println("https://www.dotabuff.com/matches/" + matchIds.get(i));
+							System.out.println("https://www.dotabuff.com/matches/" + matchIds.get(i)
+								+ "  (" + dates.get(i) + ")");
 						}
 					}
 					matchIds.removeAll(matchIds);
+					dates.removeAll(dates);
 					System.out.println(" ");
 				}
 				in.close();

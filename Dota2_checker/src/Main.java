@@ -13,9 +13,25 @@ public class Main {
 	public static void main(String[] args) throws IOException, ParseException, InterruptedException {
 		
 		Checker check = new Checker();
-		
-		// Insert your Dota2 profile ID
-		check.CheckLastPlayed(16461605);
 
+		String playerId = args[0];
+
+		if (playerId.length() < 1) {
+			System.out.println("Invalid playerID!");
+			System.out.println("");
+			System.out.println("Example usage: Main 12346321");
+			return;
+		}
+
+		try {
+			System.out.println("Looking for last match for player: " + playerId + "\n");
+			check.CheckLastPlayed(Integer.parseInt(playerId));
+		}
+		catch (NumberFormatException e){
+			System.out.println("Invalid playerID!");
+			System.out.println("");
+			System.out.println("Example usage: Main 12346321");
+			return;
+		}
 	}
 }
