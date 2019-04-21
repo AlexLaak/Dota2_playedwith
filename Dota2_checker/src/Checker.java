@@ -104,7 +104,7 @@ public class Checker {
 
 		// Get played with
 
-		for (int j = 0; j < newUrls.size(); j++) {
+		for (int j = 0; j < newUrls.size() - 1; j++) {
 
 			String name = names.get(j);
 			
