@@ -79,9 +79,12 @@ public class Checker {
 				for (int i = 0; i < msg.size(); i++) {
 					JSONObject result = (JSONObject) msg.get(i);
 					accountIds.add((Long) result.get("account_id"));
-					if (!whitelistIds.contains(result.get("account_id")) && result.get("personaname") != "null"
-							&& result.get("personaname") != null) {
-						names.add((String) result.get("personaname"));
+					if (!whitelistIds.contains(result.get("account_id")) && result.get("account_id") != null) {
+						if (result.get("personaname") == null) {
+							names.add("Unknown");
+						} else {
+							names.add((String) result.get("personaname"));
+						}
 					}
 				}
 			}
